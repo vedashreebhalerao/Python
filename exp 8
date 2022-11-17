@@ -1,0 +1,207 @@
+#include <iostream>
+#include <math.h>
+
+using namespace std;
+
+class stacks
+{
+    char exp[20];
+    int top = -1;
+    char st[20];
+    public:
+    void push(char val)
+    {
+        top++;
+        st[top] = val;
+    }
+    char pop()
+    {
+        char c = st[top];
+        top--;
+        return c;
+    }
+    int ICP(char c)
+    {
+        if (c == '(')
+            return 7;
+        else if ((c == '^')||(c == '$'))
+            return 6;
+        else if (c == '*' || c == '/')
+            return 3;
+        else if (c == '+' || c == '-')
+            return 1;
+        else
+            return 0;
+
+
+    }
+    int ISP(char c)
+    {
+        if (c == '(')
+            return 0;
+        else if ((c == '^')||(c == '$'))
+            return 5;
+        else if (c == '*' || c == '/')
+            return 4;
+        else if (c == '+' || c == '-')
+            return 2;
+        else
+            return 0;
+    }
+    void infpost()
+    {
+        int i,k = 0;
+        char post[20],ch;
+        cout<<"Enter the Expression : ";
+        cin>>exp;
+        for (i = 0;exp[i] != '\0';i++)
+        {
+            ch = exp[i];
+            if (isalpha(ch) || isdigit(ch))
+            {
+                post[k] = ch;
+                k++;
+            }
+            else if(ch== '(')
+            {
+                push('(');
+            }
+            else if(ch == ')')
+            {
+                char ch1;
+                while((ch1 = pop()) != '(')
+                {
+                    post[k] = ch1;
+                    k++;
+                }
+            }
+            else
+            {
+                while((ISP(st[top]) >= ICP(ch))&&(top!=-1))
+                {
+                    post[k] = pop();
+                    k++;
+                }
+
+                push(ch);
+
+            }
+
+        }
+        while(top >= 0)
+        {
+            post[k] = pop();
+            k++;
+        }
+        post[k] = '\0';
+        cout<<"Postfix Form is : "<<post<<endl;
+    }
+};
+
+class Evaluation
+{
+    public:
+    double st[50];
+    int top;
+    char str[50];
+    Evaluation()
+    {
+        top = -1;
+    }
+    void push(double item)
+    {
+        top++;
+        st[top] = item;
+
+    }
+    double pop()
+    {
+        double item;
+        item = st[top];
+        top--;
+        return(item);
+    }
+    double operation(double a,double b, char opr)
+    {
+
+        switch(opr)
+        {
+            case '+':
+                return (a+b);
+            case '-':
+                return (a-b);
+            case '*':
+                return (a*b);
+            case '/':
+                return (a/b);
+            case '$':
+            case '^':
+                return (pow(a,b));
+            default:
+                return (0);
+        }
+    }
+    double calculatePostfix()
+    {
+        int index = 0;
+        double x,y;
+
+        char ch;
+        while(str[index] != '\0')
+        {
+            ch=str[index];
+            if(isdigit(ch))
+            {
+                push(ch-48);
+            }
+            else if(isalpha(ch))
+            {
+                cout<<"Enter a Value of  " <<ch<<"  ";
+                cin>>x;
+                push(x);
+            }
+            else
+            {
+                y = pop();
+                x = pop();
+
+                double result = operation(x,y,ch);
+                push(result);
+            }
+            index++;
+        }
+        return (pop());
+    }
+};
+
+int main()
+{
+  int choice,ch = 1;
+  double result;
+  stacks obj;
+  Evaluation eval;
+  while(ch == 1)
+  {
+      cout<<"1. Convert Infix to Postfix expression"<<endl;
+      cout<<"2. Evaluate Postfix Expression"<<endl;
+      cout<<"Enter Your Choice : ";
+      cin>>choice;
+      switch(choice)
+      {
+          case 1:
+              obj.infpost();
+              break;
+          case 2:
+              cout<<"Enter the Postfix Expression";
+              cin>>eval.str;
+              result = eval.calculatePostfix();
+              cout<<"The Result is : "<<result<<endl;
+              break;
+          default:
+              cout<<"Invalid Input"<<endl;
+      }
+      cout<<"Do you Want to Continue (1/0) : ";
+      cin >> ch;
+  }
+   return 0;
+}
