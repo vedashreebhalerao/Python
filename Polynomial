@@ -1,0 +1,69 @@
+
+#include <iostream>
+#include <string>
+#include <sstream>
+using namespace std;
+
+
+
+string polyArrayToString(double polyArray[])
+{
+   ostringstream ostr;
+   bool empty = true;
+   for(int n = MAX_SIZE-1; n >= 0; --n)
+   {
+      if ( polyArray[n] != 0 )
+      {
+         if ( !empty )
+         {
+            ostr << " + ";
+         }
+
+         ostr << polyArray[n];
+         if ( n > 0 )
+         {
+            ostr << "*x^" << n;
+         }
+         empty = false;
+      }
+   }
+
+   return ostr.str();
+}
+
+void addition(double polyArray0[],
+              double polyArray1[],
+              double polyArrayRes[])
+{
+   for(int n = 0; n < MAX_SIZE; ++n)
+   {
+      polyArrayRes[n] = polyArray0[n] + polyArray1[n];
+   }
+}
+
+int main()
+{
+   // (2*x^2+3*x^4+5*x+6)
+   double polyArray0[MAX_SIZE] = {0};
+   polyArray0[0] = 6;
+   polyArray0[1] = 5;
+   polyArray0[2] = 2;
+   polyArray0[4] = 3;
+
+   // (1*x^5+4*x^2+7*x)
+   double polyArray1[MAX_SIZE] = {0};
+   polyArray1[1] = 7;
+   polyArray1[2] = 4;
+   polyArray1[5] = 1;
+
+   double polyArrayRes[MAX_SIZE] = {0};
+   addition(polyArray0, polyArray1, polyArrayRes);
+
+   cout << "polyArray0: " << polyArrayToString(polyArray0) << endl;
+   cout << "polyArray1: " << polyArrayToString(polyArray1) << endl;
+   cout << "polyArray0 + polyArray1: " << polyArrayToString(polyArrayRes) << endl;
+
+   return 0;
+}
+
+
