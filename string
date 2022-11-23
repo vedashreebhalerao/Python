@@ -1,0 +1,97 @@
+#include <iostream>
+#include <string>
+using namespace std;
+int main()
+{
+    int p;
+    cout<<"Enter your choice \n1.Frequency checker \n2.Delete position \n3.Character delete \n4.Palindrome "<<endl;
+    cin>>p;
+    string w;
+    cout<<"Enter a word: "<<endl;
+    cin>>w;
+    switch(p)
+    {
+    case 1:
+        {
+            int cnt=0;
+            char ch;
+            cout<<endl<<endl<<"*****FREQUENCY CHECKER*****"<<endl<<endl;
+            cout<<"Enter the letter whose frequency you want to check :"<<endl;
+            cin>>ch;
+            cout<<"The word is "<<w<<endl;
+            for(int i=0;w[i]!='\0';i++)
+            {
+                if(ch == w[i])
+                {
+                    cnt=cnt+1;
+                }
+            }
+            cout<<"The frequency of the character is :"<<cnt<<endl;
+            break;
+        }
+    case 2:
+        {
+            cout<<endl<<endl<<"*****DELETE CHARACTER*****"<<endl<<endl;
+            int k,j;
+            cout<<"Enter the two positions at which you want to delete characters :"<<endl;
+            cin>>j>>k;
+            string nw;
+            for(int a=j-1;w[a]!='\0';a++)
+            {
+                    w[a]=w[a+1];
+            }
+            for(int a=k-2;w[a]!='\0';a++)
+            {
+                    w[a]=w[a+1];
+            }
+            cout<<"The edited string is :"<<w<<endl;
+            break;
+        }
+    case 3:
+        {
+            cout<<endl<<endl<<"*****DELETE CHARACTER*****"<<endl<<endl;
+            char c;
+            cout<<"Enter the character you want to delete characters :"<<endl;
+            cin>>c;
+            string n;
+            for(int a=0;w[a]!='\0';a++)
+            {
+                if(w[a]!=c)
+                {
+                    n=n+w[a];
+                }
+            }
+            cout<<"The edited string is :"<<n<<endl;
+            break;
+        }
+    case 4:
+        {
+           cout<<endl<<endl<<"*****PALIDROME WORD*****"<<endl<<endl;
+            int cnt1=0;
+            int f=1;
+            for (int i=0;w[i]!='\0';i++)
+            {
+                cnt1=cnt1+1;
+            }
+            int a=cnt1/2;
+            for(int i=0;i<=a;i++)
+            {
+                if(w[i]!=w[cnt1-1-i])
+                {
+                    f=0;
+                    break;
+                }
+            }
+            if(f==1)
+            {
+                cout<<"Palindrome word"<<endl;
+            }
+            else
+            {
+                cout<<"Not a Palindrome word"<<endl;
+            }
+            break;
+        }
+    }
+    return 0;
+}
