@@ -1,0 +1,163 @@
+#include <iostream>
+using namespace std;
+
+struct node{
+    int data;
+    node *left, *right;
+    bool lThread, rThread; //Wasting 4bytes for int not feasible
+}*root, *header;
+
+class TBT
+{
+    public:
+        TBT()
+        {
+          root = NULL;
+          header = NULL;
+        };
+        
+        void createTBT();
+        node *getData();
+        void insertNode(node*, node*);
+        void displayInorder(node*, node*);
+};
+
+void TBT :: createTBT()
+{
+    node *newNode;
+    newNode = new node();
+    char userChoice;
+    
+    while(1)
+    {
+        newNode = getData();
+        
+        if(root == NULL)
+        {
+            root = newNode;
+            header = new node;
+            header -> data = -999;
+            header -> left = root;
+            header -> right = header;
+            
+            root -> left = root -> right = header;
+        }
+        else
+        {
+            insertNode(root, newNode);
+        }
+        
+        cout<<"Do you want to add node (y/n)?:";
+        cin>>userChoice;
+        if(userChoice == 'n')
+        {
+            break;
+        }
+    }
+       
+    
+    
+}
+
+node *TBT :: getData()
+{
+    node *newNode;
+    newNode = new node();
+    cout<<"Enter Data:";
+    cin>>newNode -> data; 
+    
+    newNode -> left = newNode -> right = NULL;
+    
+    newNode -> lThread = newNode -> rThread = true;
+    
+    return newNode;
+}
+
+void TBT :: insertNode(node *tempNode, node *addNode)
+{
+    if(addNode -> data < tempNode -> data)
+    {
+        if(tempNode -> lThread == true)
+        {
+            addNode -> left = tempNode -> left;
+            addNode -> right = tempNode;
+            tempNode -> left = addNode;
+            tempNode -> lThread = false;
+        }
+        else
+        {
+            insertNode(tempNode -> left, addNode);
+        }
+    }
+    else
+    {
+        if(tempNode -> rThread == true)
+        {
+            addNode -> right = tempNode -> right;
+            addNode -> left = tempNode;
+            tempNode -> right = addNode;
+            tempNode -> rThread = false;
+        }
+        else
+        {
+            insertNode(tempNode -> right, addNode);
+        }
+        
+    }
+}
+
+void TBT :: displayInorder(node *tempNode, node *head)
+{
+    while(tempNode != head)
+    {
+        while(tempNode -> lThread == false)
+        {
+            tempNode = tempNode -> left;
+        }
+        cout<<tempNode -> data<<endl;
+        
+        while(tempNode -> rThread == true)
+        {
+            tempNode = tempNode -> right;
+            if(tempNode == head)
+            {
+                return;
+            }
+            
+            cout<<tempNode -> data<<endl;
+        }
+        tempNode = tempNode -> right;
+    }
+}
+
+int main()
+{ 
+    int choice;
+    char userInput;
+    TBT tbtObj;
+    do{
+        cout<<"\n Menu: \n 1.Create TBT \n 2.Display content \n 3. Search \n 4. Update \n 5. Delete\n Enter your choice: ";
+        cin>>choice;
+        
+        switch(choice){
+            case 1:
+                tbtObj.createTBT();
+                break;
+            
+            case 2:
+                tbtObj.displayInorder(root, header);
+                break;
+            
+            default:
+                cout<<"Enter Correct Input"<<endl;
+        }
+        
+        cout<<"Do you wish to continue(y/n)";
+        cin>>userInput;
+        
+    }
+    
+    while(userInput == 'y');
+    
+    return 0;
+}
